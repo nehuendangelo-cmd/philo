@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 15:21:10 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/09 18:31:05 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/09 22:10:11 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,16 @@ typedef struct args
 
 typedef struct philo
 {
-	int		last_meal;
-	int		nb_meal;
-	int		id;
-	mutex	*left_fork;
-	mutex	*right_fork;
-	t_args	args;
-} philo;
-int	check_arg(int argc, char **argv, args *t_args);
-int	make_tab_args(int argc, char **argv, args *f);
+	int				last_meal;
+	int				nb_meal;
+	int				id;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
+	t_args			*args;
+}	t_philo;
+
+int	check_arg(int argc, char **argv, t_args *args);
+int	make_tab_args(int argc, char **argv, t_args *args);
 unsigned int	char_to_int(char *argv, int *error);
 
 

@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 14:29:00 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/09 18:31:07 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/09 22:08:40 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	main(int argc, char **argv)
 {
-	t_philo	f;
-	if (!check_arg(argc, argv, &f))
+	t_args	args;
+	if (!check_arg(argc, argv, &args))
 		return (1);
 	
 	
