@@ -6,7 +6,7 @@
 #    By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 14:25:37 by nd-angel          #+#    #+#              #
-#    Updated: 2026/02/09 18:30:50 by nd-angel         ###   ########.fr        #
+#    Updated: 2026/02/11 14:58:57 by nd-angel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS = main.c  parsing.c
+SRCS = main.c  parsing.c  routine.c
 
 OBJS = $(SRCS:.c=.o)
 
