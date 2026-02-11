@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 14:38:28 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/11 18:26:51 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/11 21:52:22 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 
 void	printf_action(t_philo *philo, char *action)
 {
+	long long	time_now;
 	
+	gettimeofday(&time_now, NULL);
+	pthread_mutex_lock(&mutex_printf);
+	printf("at %d, %d %s", (philo->args->time - time_now), philo->id, action);
+	pthread_mutex_unlock(&mutex_printf);
 }
 void	*routine(void *philo)
 {
@@ -24,10 +29,12 @@ void	*routine(void *philo)
 
 	
 	p = philo;
+	
 	while (p->args->dead == 0)
 	{
 		//faire penser philo
 		pthread_mutex_lock(p->left_fork);
+		printf_action(philo, "took left_fork");
 		pthread_mutex_lock(p->right_fork);
 		gettimeofday(&last_meal, NULL);
 		p->last_meal = ((last_meal.tv_sec * 1000) + (last_meal.tv_usec / 1000));

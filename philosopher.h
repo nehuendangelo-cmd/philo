@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 15:21:10 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/11 18:20:22 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/11 21:55:14 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct args
 	pthread_mutex_t	mutex_dead;
 	int				dead;
 	pthread_mutex_t	mutex_printf;
+	struct timeval	time;
 }	t_args;
 
 typedef struct philo

@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:14:56 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/11 17:15:25 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/11 21:44:54 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	make_tab_args(int argc, char **argv, t_args *args)
 	args->time_to_die = char_to_int(argv[2], &error);
 	args->time_to_eat = char_to_int(argv[3], &error);
 	args->time_to_sleep = char_to_int(argv[4], &error);
+	gettimeofday(&args->time, NULL);
 	pthread_mutex_init(&args->mutex_printf, NULL);
 	pthread_mutex_init(&args->mutex_dead, NULL);
 	if (args->nb_philos == 0 || args->time_to_die == 0 || args->time_to_eat == 0
