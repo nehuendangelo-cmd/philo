@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 15:21:10 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/14 02:25:42 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/14 04:57:18 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 typedef struct args
 {
 	unsigned int	nb_philos;
-	unsigned int	time_to_die;
+	long long		time_to_die;
 	unsigned int	time_to_eat;
 	unsigned int	time_to_sleep;
 	int				nb_meals;
@@ -54,5 +54,7 @@ void	*routine(void *philo);
 void	make_tab_threads(pthread_t **thread, pthread_t **monitor, t_args *args);
 void	*is_died(void *philo);
 void	printf_action(t_philo *philo, char *action);
+void	mutex_destroy(t_philo *philo);
+void	mutex_destroy_args(t_args *args);
 
 #endif

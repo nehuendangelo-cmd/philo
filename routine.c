@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 14:38:28 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/14 02:43:20 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/14 04:30:45 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ void	*routine(void *philo)
 
 	
 	p = philo;
-	
+	pthread_mutex_lock(&p->args->mutex_dead);
 	while (p->args->dead == 0)
 	{
+		pthread_mutex_unlock(&p->args->mutex_dead);
 		//faire penser philo
 		if (p->id % 2 == 0)
 		{
@@ -47,7 +48,9 @@ void	*routine(void *philo)
 			gettimeofday(&last_meal, NULL);
 			p->last_meal = ((last_meal.tv_sec * 1000) + (last_meal.tv_usec / 1000));
 			pthread_mutex_unlock(&p->mutex_last_meal);
+			pthread_mutex_lock(&p->mutex_nb_meal);
 			p->nb_meal += 1;
+			pthread_mutex_unlock(&p->mutex_nb_meal);
 			printf_action(philo, "is eating");
 			usleep(p->args->time_to_eat * 1000);
 			pthread_mutex_unlock(p->right_fork);
@@ -69,7 +72,9 @@ void	*routine(void *philo)
 				gettimeofday(&last_meal, NULL);
 				p->last_meal = ((last_meal.tv_sec * 1000) + (last_meal.tv_usec / 1000));
 				pthread_mutex_unlock(&p->mutex_last_meal);
+				pthread_mutex_lock(&p->mutex_nb_meal);
 				p->nb_meal += 1;
+				pthread_mutex_unlock(&p->mutex_nb_meal);
 				printf_action(philo, "is eating");
 				usleep(p->args->time_to_eat * 1000);
 				pthread_mutex_unlock(p->left_fork);

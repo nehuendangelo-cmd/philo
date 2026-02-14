@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 14:29:00 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/14 01:53:28 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/14 05:08:54 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,39 @@ int	main(int argc, char **argv)
 	{
 		pthread_join(thread[i], NULL);
 		pthread_join(monitor[i], NULL);
+		mutex_destroy(&philo[i]);
 		i++;
 	}
+	free_all(philo, thread, monitor);
+	mutex_destroy_args(&args);
 	return (0);
+}
+
+void	free_all(t_philo *philo, pthread_t *thread, pthread_t *monitor)
+{
+	int		i;
+
+	i = 0;
+	while (philo[i])
+	{
+		free(philo[i]);
+		free(thread[i]);
+		i++;
+	}
+	free(monitor);
+}
+
+void	mutex_destroy(t_philo *philo)
+{
+	pthread_mutex_destroy(philo->left_fork);
+	pthread_mutex_destroy(&philo->mutex_last_meal);
+	pthread_mutex_destroy(&philo->mutex_nb_meal);
+}
+
+void	mutex_destroy_args(t_args *args)
+{
+	pthread_mutex_destroy(&args->mutex_dead);
+	pthread_mutex_destroy(&args->mutex_printf);
 }
 
 void	*is_died(void *philo)
@@ -48,7 +78,8 @@ void	*is_died(void *philo)
 	struct timeval time;
 
 	p = philo;
-	while (p->args->dead != 1)
+	while (p->args->dead != 1 &&
+		 (p->args->nb_meals == -1 || p->nb_meal < p->args->nb_meals))
 	{
 		gettimeofday(&time, NULL);
 		time_now = ((time.tv_sec * 1000) + (time.tv_usec / 1000));
