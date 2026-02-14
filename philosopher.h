@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 15:21:10 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/13 23:47:14 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/14 02:25:42 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct philo
 	pthread_mutex_t	*right_fork;
 	t_args			*args;
 	pthread_mutex_t	mutex_last_meal;
-	pthread_mutex_t mutex_nb_meal;
+	pthread_mutex_t	mutex_nb_meal;
 }	t_philo;
 
 int	check_arg(int argc, char **argv, t_args *args);
@@ -51,6 +51,8 @@ int	make_tab_args(int argc, char **argv, t_args *args);
 unsigned int	char_to_int(char *argv, int *error);
 void	init_struct(t_args *args, t_philo **philo);
 void	*routine(void *philo);
-void	make_tab_threads(pthread_t **thread, t_args *args);
+void	make_tab_threads(pthread_t **thread, pthread_t **monitor, t_args *args);
+void	*is_died(void *philo);
+void	printf_action(t_philo *philo, char *action);
 
 #endif
