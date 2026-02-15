@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 14:38:28 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/14 04:30:45 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/15 16:37:34 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,57 +39,64 @@ void	*routine(void *philo)
 		pthread_mutex_unlock(&p->args->mutex_dead);
 		//faire penser philo
 		if (p->id % 2 == 0)
-		{
-			pthread_mutex_lock(p->right_fork);
-			printf_action(philo, "took right_fork");
-			pthread_mutex_lock(p->left_fork);
-			printf_action(philo, "took left_fork");
-			pthread_mutex_lock(&p->mutex_last_meal);
-			gettimeofday(&last_meal, NULL);
-			p->last_meal = ((last_meal.tv_sec * 1000) + (last_meal.tv_usec / 1000));
-			pthread_mutex_unlock(&p->mutex_last_meal);
-			pthread_mutex_lock(&p->mutex_nb_meal);
-			p->nb_meal += 1;
-			pthread_mutex_unlock(&p->mutex_nb_meal);
-			printf_action(philo, "is eating");
-			usleep(p->args->time_to_eat * 1000);
-			pthread_mutex_unlock(p->right_fork);
-			pthread_mutex_unlock(p->left_fork);
-			printf_action(philo, "is sleeping");
-			usleep(p->args->time_to_sleep * 1000);
-			printf_action(philo, "is thinking");
-		}
+			routine_pair(&p)
 		else
-		{
-			usleep(200);
-			pthread_mutex_lock(p->left_fork);
-			printf_action(philo, "took left_fork");
-			if (p->right_fork != p->left_fork)
-			{
-				pthread_mutex_lock(p->right_fork);
-				printf_action(philo, "took right_fork");
-				pthread_mutex_lock(&p->mutex_last_meal);
-				gettimeofday(&last_meal, NULL);
-				p->last_meal = ((last_meal.tv_sec * 1000) + (last_meal.tv_usec / 1000));
-				pthread_mutex_unlock(&p->mutex_last_meal);
-				pthread_mutex_lock(&p->mutex_nb_meal);
-				p->nb_meal += 1;
-				pthread_mutex_unlock(&p->mutex_nb_meal);
-				printf_action(philo, "is eating");
-				usleep(p->args->time_to_eat * 1000);
-				pthread_mutex_unlock(p->left_fork);
-				pthread_mutex_unlock(p->right_fork);
-				printf_action(philo, "is sleeping");
-				usleep(p->args->time_to_sleep * 1000);
-				printf_action(philo, "is thinking");
-			}
-			else
-			{
-				while (p->args->dead == 0)
-					usleep(100);
-				pthread_mutex_unlock(p->left_fork);
-			}
-		}
+			routine_impair(&p);
 	}
 	return (NULL);
+}
+
+static void routine_impair(t_philo *p)
+{
+	usleep(200);
+	pthread_mutex_lock(p->left_fork);
+	printf_action(philo, "took left_fork");
+	if (p->right_fork != p->left_fork)
+	{
+		pthread_mutex_lock(p->right_fork);
+		printf_action(philo, "took right_fork");
+		pthread_mutex_lock(&p->mutex_last_meal);
+		gettimeofday(&last_meal, NULL);
+		p->last_meal = ((last_meal.tv_sec * 1000) + (last_meal.tv_usec / 1000));
+		pthread_mutex_unlock(&p->mutex_last_meal);
+		pthread_mutex_lock(&p->mutex_nb_meal);
+		p->nb_meal += 1;
+		pthread_mutex_unlock(&p->mutex_nb_meal);
+		printf_action(philo, "is eating");
+		usleep(p->args->time_to_eat * 1000);
+		pthread_mutex_unlock(p->left_fork);
+		pthread_mutex_unlock(p->right_fork);
+		printf_action(philo, "is sleeping");
+		usleep(p->args->time_to_sleep * 1000);
+		printf_action(philo, "is thinking");
+	}
+	else
+	{
+		while (p->args->dead == 0)
+			usleep(100);
+		pthread_mutex_unlock(p->left_fork);
+	}
+}
+
+
+static void routine_pair(t_philo *p)
+{
+	pthread_mutex_lock(p->right_fork);
+	printf_action(philo, "took right_fork");	
+	pthread_mutex_lock(p->left_fork);
+	printf_action(philo, "took left_fork");
+	pthread_mutex_lock(&p->mutex_last_meal);
+	gettimeofday(&last_meal, NULL);
+	p->last_meal = ((last_meal.tv_sec * 1000) + (last_meal.tv_usec / 1000));
+	pthread_mutex_unlock(&p->mutex_last_meal);
+	pthread_mutex_lock(&p->mutex_nb_meal);
+	p->nb_meal += 1;
+	pthread_mutex_unlock(&p->mutex_nb_meal);
+	printf_action(philo, "is eating");
+	usleep(p->args->time_to_eat * 1000);
+	pthread_mutex_unlock(p->right_fork);
+	pthread_mutex_unlock(p->left_fork);
+	printf_action(philo, "is sleeping");
+	usleep(p->args->time_to_sleep * 1000);
+	printf_action(philo, "is thinking");
 }

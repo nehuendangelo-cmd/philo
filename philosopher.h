@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 15:21:10 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/14 04:57:18 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/15 16:25:31 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 typedef struct args
 {
-	unsigned int	nb_philos;
+	int				nb_philos;
 	long long		time_to_die;
 	unsigned int	time_to_eat;
 	unsigned int	time_to_sleep;

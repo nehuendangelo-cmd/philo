@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 14:29:00 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/14 05:08:54 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/15 16:30:11 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,36 +31,37 @@ int	main(int argc, char **argv)
 		pthread_create(&monitor[i], NULL, is_died, (&philo[i]));
 		i++;
 	}
+	finish_pthread_and_destroy_mutex(philo, thread, monitor)
+	free_all(philo, thread, monitor);
+	mutex_destroy_args(&args);
+	return (0);
+}
+
+static void finish_pthread_and_destroy_mutex(t_philo *philo, pthread_t *thread, pthread_t *monitor)
+{
+	int		i;
+
 	i = 0;
-	while (i < args.nb_philos)
+	while (i < philo->args->nb_philos)
 	{
 		pthread_join(thread[i], NULL);
 		pthread_join(monitor[i], NULL);
 		mutex_destroy(&philo[i]);
 		i++;
 	}
-	free_all(philo, thread, monitor);
-	mutex_destroy_args(&args);
-	return (0);
 }
 
 void	free_all(t_philo *philo, pthread_t *thread, pthread_t *monitor)
 {
-	int		i;
-
-	i = 0;
-	while (philo[i])
-	{
-		free(philo[i]);
-		free(thread[i]);
-		i++;
-	}
+	free(philo->right_fork);
+	free(philo);
+	free(thread);
 	free(monitor);
 }
 
 void	mutex_destroy(t_philo *philo)
 {
-	pthread_mutex_destroy(philo->left_fork);
+	pthread_mutex_destroy(philo->right_fork);
 	pthread_mutex_destroy(&philo->mutex_last_meal);
 	pthread_mutex_destroy(&philo->mutex_nb_meal);
 }
@@ -105,17 +106,14 @@ void	make_tab_threads(pthread_t **thread, pthread_t **monitor, t_args *args)
 void	init_struct(t_args *args, t_philo **philo)
 {
 	pthread_mutex_t	*forks;
-	unsigned int	i;
+	int				i;
 	struct timeval	time;
 
 	gettimeofday(&time, NULL);
-	i = 0;
+	i = -1;
 	forks = malloc(sizeof(pthread_mutex_t) * args->nb_philos);
 	while (i < args->nb_philos)
-	{
-		pthread_mutex_init(&forks[i], NULL);
-		i++;
-	}
+		pthread_mutex_init(&forks[i++], NULL);
 	i = 0;
 	*philo = malloc(sizeof(t_philo) * args->nb_philos);
 	while (i < args->nb_philos)
