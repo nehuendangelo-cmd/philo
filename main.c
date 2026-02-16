@@ -6,17 +6,19 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 14:29:00 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/16 16:33:44 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/16 20:27:29 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
+static void	free_all(t_philo *philo, pthread_t *thread, pthread_t *monitor);
+
 int	main(int argc, char **argv)
 {
 	t_philo				*philo;
 	t_args				args;
-	unsigned int		i;
+	int					i;
 	pthread_t			*thread;
 	pthread_t			*monitor;
 
@@ -25,7 +27,7 @@ int	main(int argc, char **argv)
 		return (1);
 	init_struct(&args, &philo);
 	make_tab_threads(&thread, &monitor, &args);
-	while (i < args.nb_philos)
+	while (i < args.nb_philos && args.dead == 0 && philo)
 	{
 		pthread_create(&thread[i], NULL, routine, (&philo[i]));
 		pthread_create(&monitor[i], NULL, is_died, (&philo[i]));
@@ -37,7 +39,7 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-void	free_all(t_philo *philo, pthread_t *thread, pthread_t *monitor)
+static void	free_all(t_philo *philo, pthread_t *thread, pthread_t *monitor)
 {
 	free(philo->right_fork);
 	free(philo);
@@ -71,7 +73,7 @@ void	*is_died(void *philo)
 		gettimeofday(&time, NULL);
 		time_now = ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 		pthread_mutex_lock(&p->mutex_last_meal);
-		if ((p->args->time_to_die - (time_now - p->last_meal)) < 0)
+		if ((p->args->time_to_die - (time_now - p->last_meal)) <= 0)
 		{
 			printf_action(philo, "died");
 			pthread_mutex_lock(&p->args->mutex_dead);

@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 15:21:10 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/16 16:34:37 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/16 19:47:00 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,8 @@ void			*is_died(void *philo);
 void			printf_action(t_philo *philo, char *action);
 void			mutex_destroy(t_philo *philo);
 void			mutex_destroy_args(t_args *args);
+void			finish_pthread_and_destroy_mutex(t_philo *philo, pthread_t *thread,
+	pthread_t *monitor);
+void			printf_action(t_philo *philo, char *action);
 
 #endif

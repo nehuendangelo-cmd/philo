@@ -6,11 +6,16 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 14:38:28 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/16 16:19:14 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/16 20:35:11 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
+
+static void	routine_impair(t_philo *p);
+static void	routine_pair(t_philo *p);
+static void	sleep_and_think(t_philo *p);
+static void	handle_single_fork(t_philo *p);
 
 void	*routine(void *philo)
 {

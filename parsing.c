@@ -6,11 +6,13 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:14:56 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/16 16:26:03 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/16 19:44:31 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
+
+static void	fill_args_struct(char **argv, t_args *args, int *error);
 
 int	check_arg(int argc, char **argv, t_args *args)
 {
@@ -48,13 +50,13 @@ int	make_tab_args(int argc, char **argv, t_args *args)
 	return (1);
 }
 
-void	fill_args_struct(char **argv, t_args *args, int *error)
+static void	fill_args_struct(char **argv, t_args *args, int *error)
 {
 	args->dead = 0;
-	args->nb_philos = char_to_int(argv[1], &error);
-	args->time_to_die = char_to_int(argv[2], &error);
-	args->time_to_eat = char_to_int(argv[3], &error);
-	args->time_to_sleep = char_to_int(argv[4], &error);
+	args->nb_philos = char_to_int(argv[1], error);
+	args->time_to_die = char_to_int(argv[2], error);
+	args->time_to_eat = char_to_int(argv[3], error);
+	args->time_to_sleep = char_to_int(argv[4], error);
 	gettimeofday(&args->time, NULL);
 	pthread_mutex_init(&args->mutex_printf, NULL);
 	pthread_mutex_init(&args->mutex_dead, NULL);

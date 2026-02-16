@@ -1,0 +1,5 @@
+dans parsing.c je crois que le &error est inutiles dans une des fonctions
+
+pk dans is died on usleep(1) ?
+
+est ce que sa pose probleme

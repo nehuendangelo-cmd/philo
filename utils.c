@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:15:10 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/16 16:30:42 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/16 19:55:25 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,16 @@ void	init_struct(t_args *args, t_philo **philo)
 	struct timeval	time;
 
 	gettimeofday(&time, NULL);
-	i = -1;
 	forks = malloc(sizeof(pthread_mutex_t) * args->nb_philos);
-	while (i < args->nb_philos)
-		pthread_mutex_init(&forks[i++], NULL);
-	i = 0;
 	*philo = malloc(sizeof(t_philo) * args->nb_philos);
+	i = 0;
 	while (i < args->nb_philos)
 	{
 		(*philo)[i].id = i + 1;
 		(*philo)[i].last_meal = ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 		(*philo)[i].nb_meal = 0;
 		(*philo)[i].args = args;
+		pthread_mutex_init(&forks[i], NULL);
 		(*philo)[i].left_fork = &forks[(i + 1) % args->nb_philos];
 		(*philo)[i].right_fork = &forks[i];
 		pthread_mutex_init(&(*philo)[i].mutex_last_meal, NULL);
@@ -62,7 +60,7 @@ void	make_tab_threads(pthread_t **thread, pthread_t **monitor, t_args *args)
 	*monitor = malloc(sizeof(pthread_t) * args->nb_philos);
 }
 
-static void	finish_pthread_and_destroy_mutex(t_philo *philo, pthread_t *thread,
+void	finish_pthread_and_destroy_mutex(t_philo *philo, pthread_t *thread,
 	pthread_t *monitor)
 {
 	int		i;

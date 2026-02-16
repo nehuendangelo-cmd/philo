@@ -16,7 +16,7 @@ CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS = main.c  parsing.c  routine.c
+SRCS = main.c  parsing.c  routine.c  utils.c
 
 OBJS = $(SRCS:.c=.o)
 
