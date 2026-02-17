@@ -4,3 +4,28 @@ pk dans is died on usleep(1) ?
 
 est ce que sa pose probleme
  
+
+ Réfléchissons ensemble avec une analogie :
+
+
+Imagine que les philosophes pairs et impairs forment deux "équipes" qui alternent. Avec 5 philosophes :
+
+Équipe paire : P2, P4 (2 philosophes)
+Équipe impaire : P1, P3, P5 (3 philosophes)
+
+Le problème : l'équipe impaire a 3 membres mais seulement 2 places pour manger à chaque tour (car 5 fourchettes = 2 mangent max).
+
+
+Question 1 : Combien de temps dure un cycle pair ? (manger + dormir)
+
+
+Question 2 : Pendant ce temps, l'équipe impaire doit faire passer combien de philosophes pour manger ?
+
+
+Question 3 : Donc, si les impairs ont besoin de faire 2 tours de repas pendant que les pairs font 1 tour, qu'est-ce que ça implique pour le temps de réflexion des pairs ?
+
+
+Essaie de répondre à ces questions, et tu trouveras la formule. Pense en termes de :
+
+Qui doit "attendre" pour laisser passer les autres ?
+Combien de temps cette attente doit-elle durer ?
