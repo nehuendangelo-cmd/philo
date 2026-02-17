@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+         #
+#    By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 14:25:37 by nd-angel          #+#    #+#              #
-#    Updated: 2026/02/17 14:25:13 by nehuen           ###   ########.fr        #
+#    Updated: 2026/02/17 18:42:02 by nd-angel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
 
-// -fsanitize=thread
+# -fsanitize=thread
 
 SRCS = main.c  parsing.c  routine.c  utils.c
 

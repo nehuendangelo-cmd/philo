@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:15:10 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/17 15:13:35 by nehuen           ###   ########.fr       */
+/*   Updated: 2026/02/17 19:14:05 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	printf_action(t_philo *philo, char *action)
 	struct timeval	time_now;
 	long long		time_action;
 
-	pthread_mutex_lock(&philo->args->mutex_printf);
 	pthread_mutex_lock(&philo->args->mutex_dead);
 	if (philo->args->dead != 1)
 	{
@@ -49,16 +48,18 @@ void	printf_action(t_philo *philo, char *action)
 		time_action = ((time_now.tv_sec * 1000) + (time_now.tv_usec / 1000))
 			- ((philo->args->time.tv_sec * 1000)
 				+ philo->args->time.tv_usec / 1000);
+		pthread_mutex_lock(&philo->args->mutex_printf);
 		printf("at %lld, %d %s \n", time_action, philo->id, action);
+		pthread_mutex_unlock(&philo->args->mutex_printf);
 	}
-	pthread_mutex_unlock(&philo->args->mutex_dead);
-	pthread_mutex_unlock(&philo->args->mutex_printf);
+	else
+		pthread_mutex_unlock(&philo->args->mutex_dead);
 }
 
 void	make_tab_threads(pthread_t **thread, pthread_t **monitor, t_args *args)
 {
 	*thread = malloc(sizeof(pthread_t) * args->nb_philos);
-	*monitor = malloc(sizeof(pthread_t) * args->nb_philos);
+	*monitor = malloc(sizeof(pthread_t) * 1);
 }
 
 void	finish_pthread_and_destroy_mutex(t_philo *philo, pthread_t *thread,
@@ -70,8 +71,8 @@ void	finish_pthread_and_destroy_mutex(t_philo *philo, pthread_t *thread,
 	while (i < philo->args->nb_philos)
 	{
 		pthread_join(thread[i], NULL);
-		pthread_join(monitor[i], NULL);
 		mutex_destroy(&philo[i]);
 		i++;
 	}
+	pthread_join(*monitor, NULL);
 }

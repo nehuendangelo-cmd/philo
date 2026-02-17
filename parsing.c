@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:14:56 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/17 13:07:56 by nehuen           ###   ########.fr       */
+/*   Updated: 2026/02/17 19:21:29 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@ int	make_tab_args(int argc, char **argv, t_args *args)
 
 static void	fill_args_struct(char **argv, t_args *args, int *error)
 {
+	struct timeval	time_now;
+
+	gettimeofday(&time_now, NULL);
 	pthread_mutex_init(&args->mutex_printf, NULL);
 	pthread_mutex_init(&args->mutex_dead, NULL);
 	pthread_mutex_lock(&args->mutex_dead);
@@ -61,7 +64,7 @@ static void	fill_args_struct(char **argv, t_args *args, int *error)
 	args->time_to_die = char_to_int(argv[2], error);
 	args->time_to_eat = char_to_int(argv[3], error);
 	args->time_to_sleep = char_to_int(argv[4], error);
-	gettimeofday(&args->time, NULL);
+	args->time = (time_now.tv_sec * 1000) + (time_now.tv_usec / 1000);
 }
 
 unsigned int	char_to_int(char *argv, int *error)

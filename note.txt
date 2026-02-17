@@ -3,27 +3,4 @@ dans parsing.c je crois que le &error est inutiles dans une des fonctions
 pk dans is died on usleep(1) ?
 
 est ce que sa pose probleme
-
-Bien, tu avances ! Quelques points :
-
-1. Ligne 93 : erreur de syntaxe
-
-p[0]->args->nb_meals — tu melanges les notations. p[0] c'est une structure (pas un pointeur), donc c'est . et non ->. Ca devrait etre quoi ?
-
-2. Le compteur count_eat_enough n'est jamais remis a 0 :
-
-Tu l'initialises a 0 avant le while(1). Mais a chaque tour de la boucle externe, le compteur continue de s'accumuler. Si au premier tour 3 philos ont assez mange, et au deuxieme tour 3 autres, le compteur vaudra 6 alors que peut-etre seulement 3 ont vraiment assez mange. Ou est-ce que tu devrais remettre count_eat_enough a 0 ?
-
-3. Le else attrape deux cas differents :
-
-Ta condition if verifie dead != 1 && nb_meals pas atteint. Donc le else s'execute quand :
-
-Soit dead == 1 (quelqu'un est deja mort)
-Soit le philo i a assez mange
-Si dead == 1, tu incrementes count_eat_enough — ca n'a pas de sens, non ? Tu devrais traiter ces deux cas differemment. Si dead == 1, que doit faire le moniteur immediatement ?
-
-4. Le usleep(1) ligne 109 est dans la boucle interne :
-
-Tu fais une pause a chaque philosophe verifie. Avec 500 philosophes, ca fait 500 usleep par tour. Le usleep devrait etre ou ? Apres avoir verifie tous les philosophes, dans la boucle externe.
-
-Corrige ces points et on revoit ensemble !
+ 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 14:38:28 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/17 15:10:16 by nehuen           ###   ########.fr       */
+/*   Updated: 2026/02/17 19:08:37 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	routine_pair(t_philo *p);
 static void	sleep_and_think(t_philo *p);
 static void	handle_single_fork(t_philo *p);
 
-void	*routine(void *philo, long long last_meal)
+void	*routine(void *philo)
 {
 	t_philo			*p;
 
@@ -76,7 +76,8 @@ static void	sleep_and_think(t_philo *p)
 
 static void	handle_single_fork(t_philo *p)
 {
-	while (p->args->dead == 0)
+	
+	while (1)
 	{
 		pthread_mutex_lock(&p->args->mutex_dead);
 		if (p->args->dead == 1)
@@ -85,9 +86,10 @@ static void	handle_single_fork(t_philo *p)
 			pthread_mutex_unlock(p->left_fork);
 			return ;
 		}
+		pthread_mutex_unlock(&p->args->mutex_dead);
 		usleep(100);
 	}
-			pthread_mutex_unlock(p->left_fork);
+	pthread_mutex_unlock(p->left_fork);
 }
 
 static void	routine_pair(t_philo *p)

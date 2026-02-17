@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 14:29:00 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/17 16:07:06 by nehuen           ###   ########.fr       */
+/*   Updated: 2026/02/17 19:24:11 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,45 +76,51 @@ void	*is_died(void *philo)
 	int							count_eat_enough;
 	p = philo;
 	
-	count_eat_enough = 0;
 	while (1)
 	{
+		pthread_mutex_lock(&p->args->mutex_dead);
+		if (p->args->dead == 1)
+		{
+			pthread_mutex_unlock(&p->args->mutex_dead);
+			return (NULL);
+		}
+		pthread_mutex_unlock(&p->args->mutex_dead);
 		i = 0;
+		count_eat_enough = 0;
 		while (i < p[0].args->nb_philos)
 		{
-			pthread_mutex_lock(&p[i].args->mutex_dead);
 			pthread_mutex_lock(&p[i].mutex_last_meal);
 			pthread_mutex_lock(&p[i].mutex_nb_meal);
-			if (p[i].args->dead != 1 && (p[i].args->nb_meals == -1
-				|| p[i].nb_meal < p[0]->args->nb_meals))
+			if ((p[i].args->nb_meals == -1
+				|| p[i].nb_meal < p[0].args->nb_meals))
 			{
+				pthread_mutex_unlock(&p[i].mutex_nb_meal);
 				gettimeofday(&time, NULL);
-				time_now = ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+				time_now = p->args->time - ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 				if ((p[i].args->time_to_die - (time_now - p[i].last_meal)) <= 0)
 				{
-					printf_action(&p[i], "died");
-					p[i].args->dead = 1;
-					pthread_mutex_unlock(&p[i].args->mutex_dead);
 					pthread_mutex_unlock(&p[i].mutex_last_meal);
-					pthread_mutex_unlock(&p[i].mutex_nb_meal);
+					pthread_mutex_lock(&p->args->mutex_printf);
+					pthread_mutex_lock(&p->args->mutex_dead);
+					p[i].args->dead = 1;
+					printf("%lld %d died", time_now, p[i].id);
+					pthread_mutex_unlock(&p->args->mutex_dead);
+					pthread_mutex_unlock(&p->args->mutex_printf);
 					return (NULL);
 				}
-				pthread_mutex_unlock(&p[i].args->mutex_dead);
-				pthread_mutex_unlock(&p[i].mutex_last_meal);
-				pthread_mutex_unlock(&p[i].mutex_nb_meal);
-				usleep(1);
 			}
 			else
 			{
-				pthread_mutex_unlock(&p[i].args->mutex_dead);
 				pthread_mutex_unlock(&p[i].mutex_last_meal);
 				pthread_mutex_unlock(&p[i].mutex_nb_meal);
 				count_eat_enough++;
-				if (count_eat_enough == p[0].args->nb_philos)
+				if (count_eat_enough == p[0].args->nb_philos)	
 					return (NULL);
 			}
+			pthread_mutex_unlock(&p[i].mutex_last_meal);
 			i++;
 		}
+		usleep(100);
 }
 	return (NULL);
 }
