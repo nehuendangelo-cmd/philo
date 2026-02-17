@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 15:21:10 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/16 19:47:00 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/17 15:14:39 by nehuen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,18 @@ typedef struct philo
 	pthread_mutex_t	mutex_nb_meal;
 }	t_philo;
 
-int				check_arg(int argc, char **argv, t_args *args);
-int				make_tab_args(int argc, char **argv, t_args *args);
+int						check_arg(int argc, char **argv, t_args *args);
+int						make_tab_args(int argc, char **argv, t_args *args);
 unsigned int	char_to_int(char *argv, int *error);
-void			init_struct(t_args *args, t_philo **philo);
-void			*routine(void *philo);
-void			make_tab_threads(pthread_t **thread, pthread_t **monitor,
+void					init_struct(t_args *args, t_philo **philo, long long last_meal);
+void					*routine(void *philo);
+void					make_tab_threads(pthread_t **thread, pthread_t **monitor,
 					t_args *args);
-void			*is_died(void *philo);
-void			printf_action(t_philo *philo, char *action);
-void			mutex_destroy(t_philo *philo);
-void			mutex_destroy_args(t_args *args);
-void			finish_pthread_and_destroy_mutex(t_philo *philo, pthread_t *thread,
+void					*is_died(void *philo);
+void					printf_action(t_philo *philo, char *action);
+void					mutex_destroy(t_philo *philo);
+void					mutex_destroy_args(t_args *args);
+void					finish_pthread_and_destroy_mutex(t_philo *philo, pthread_t *thread,
 	pthread_t *monitor);
 void			printf_action(t_philo *philo, char *action);
 

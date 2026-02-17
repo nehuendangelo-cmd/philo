@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+         #
+#    By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 14:25:37 by nd-angel          #+#    #+#              #
-#    Updated: 2026/02/11 14:58:57 by nd-angel         ###   ########.fr        #
+#    Updated: 2026/02/17 14:25:13 by nehuen           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,9 @@ NAME = philo
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
+
+// -fsanitize=thread
 
 SRCS = main.c  parsing.c  routine.c  utils.c
 
