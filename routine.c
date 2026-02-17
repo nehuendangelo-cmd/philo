@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 14:38:28 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/17 19:08:37 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/17 22:55:13 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void	routine_impair(t_philo *p)
 		p->last_meal = ((last_meal.tv_sec * 1000) + (last_meal.tv_usec / 1000));
 		pthread_mutex_unlock(&p->mutex_last_meal);
 		pthread_mutex_lock(&p->mutex_nb_meal);
-		p->nb_meal += 1;
+		p->nb_meal++;
 		pthread_mutex_unlock(&p->mutex_nb_meal);
 		printf_action(p, "is eating");
 		usleep(p->args->time_to_eat * 1000);
@@ -105,7 +105,7 @@ static void	routine_pair(t_philo *p)
 	p->last_meal = ((last_meal.tv_sec * 1000) + (last_meal.tv_usec / 1000));
 	pthread_mutex_unlock(&p->mutex_last_meal);
 	pthread_mutex_lock(&p->mutex_nb_meal);
-	p->nb_meal += 1;
+	p->nb_meal++;
 	pthread_mutex_unlock(&p->mutex_nb_meal);
 	printf_action(p, "is eating");
 	usleep(p->args->time_to_eat * 1000);

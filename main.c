@@ -6,7 +6,7 @@
 /*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 14:29:00 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/17 19:24:11 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/17 22:59:09 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	*is_died(void *philo)
 	int							count_eat_enough;
 	p = philo;
 	
+	
 	while (1)
 	{
 		pthread_mutex_lock(&p->args->mutex_dead);
@@ -96,18 +97,20 @@ void	*is_died(void *philo)
 			{
 				pthread_mutex_unlock(&p[i].mutex_nb_meal);
 				gettimeofday(&time, NULL);
-				time_now = p->args->time - ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+				time_now =((time.tv_sec * 1000) + (time.tv_usec / 1000));
 				if ((p[i].args->time_to_die - (time_now - p[i].last_meal)) <= 0)
 				{
 					pthread_mutex_unlock(&p[i].mutex_last_meal);
 					pthread_mutex_lock(&p->args->mutex_printf);
 					pthread_mutex_lock(&p->args->mutex_dead);
 					p[i].args->dead = 1;
-					printf("%lld %d died", time_now, p[i].id);
+					printf("%lld %d died", (time_now - p->args->time), p[i].id);
 					pthread_mutex_unlock(&p->args->mutex_dead);
 					pthread_mutex_unlock(&p->args->mutex_printf);
 					return (NULL);
 				}
+				else
+					pthread_mutex_unlock(&p[i].mutex_last_meal);
 			}
 			else
 			{
@@ -115,9 +118,13 @@ void	*is_died(void *philo)
 				pthread_mutex_unlock(&p[i].mutex_nb_meal);
 				count_eat_enough++;
 				if (count_eat_enough == p[0].args->nb_philos)	
+				{
+					pthread_mutex_lock(&p->args->mutex_dead);
+					p->args->dead = 1;
+					pthread_mutex_unlock(&p->args->mutex_dead);
 					return (NULL);
+				}
 			}
-			pthread_mutex_unlock(&p[i].mutex_last_meal);
 			i++;
 		}
 		usleep(100);
