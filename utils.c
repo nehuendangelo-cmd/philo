@@ -3,30 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:15:10 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/17 23:02:48 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/18 19:16:23 by nehuen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-void	init_struct(t_args *args, t_philo **philo, long long last_meal)
+void	init_struct(t_args *args, t_philo **philo)
 {
 	pthread_mutex_t	*forks;
 	int				i;
-
+	long long			last_meal;
+	struct timeval	time;
+	
+	gettimeofday(&time, NULL);
+	last_meal = ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 	forks = malloc(sizeof(pthread_mutex_t) * args->nb_philos);
 	*philo = malloc(sizeof(t_philo) * args->nb_philos);
+	*philo->args = args;
+	*philo->args->time = last_meal;
 	i = 0;
 	while (i < args->nb_philos)
 	{
 		(*philo)[i].id = i + 1;
 		(*philo)[i].last_meal = last_meal;
 		(*philo)[i].nb_meal = 0;
-		(*philo)[i].args = args;
-		(*philo)[0].args->time = last_meal;
+
 		pthread_mutex_init(&forks[i], NULL);
 		(*philo)[i].left_fork = &forks[(i + 1) % args->nb_philos];
 		(*philo)[i].right_fork = &forks[i];
@@ -80,5 +85,4 @@ void	finish_pthread_and_destroy_mutex(t_philo *philo, pthread_t *thread,
 		mutex_destroy(&philo[i]);
 		i++;
 	}
-	
 }

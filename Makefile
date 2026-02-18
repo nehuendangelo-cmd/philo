@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+         #
+#    By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 14:25:37 by nd-angel          #+#    #+#              #
-#    Updated: 2026/02/17 18:42:02 by nd-angel         ###   ########.fr        #
+#    Updated: 2026/02/18 18:45:19 by nehuen           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
 
 # -fsanitize=thread
 
-SRCS = main.c  parsing.c  routine.c  utils.c
+SRCS = main.c  parsing.c  routine.c  utils.c  monitor.c
 
 OBJS = $(SRCS:.c=.o)
 

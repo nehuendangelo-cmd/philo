@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 14:38:28 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/17 22:55:13 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/18 19:13:47 by nehuen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
+static void smart_sleep(long long time);
 static void	routine_impair(t_philo *p);
 static void	routine_pair(t_philo *p);
 static void	sleep_and_think(t_philo *p);
@@ -60,18 +61,44 @@ static void	routine_impair(t_philo *p)
 		p->nb_meal++;
 		pthread_mutex_unlock(&p->mutex_nb_meal);
 		printf_action(p, "is eating");
-		usleep(p->args->time_to_eat * 1000);
+		smart_sleep(p->args->time_to_eat * 1000);
 		pthread_mutex_unlock(p->left_fork);
 		pthread_mutex_unlock(p->right_fork);
 		sleep_and_think(p);
 	}
 }
+static void smart_sleep(long long time)
+{
+	struct timeval time_struct;
+	long long time_before;
+	long long	time_after;
 
+	time /= 1000;
+	gettimeofday(&time_struct, NULL);
+	time_before = (time_struct.tv_sec * 1000) + (time_struct.tv_usec / 1000);
+	time_after = 0;
+	while (time_after - time_before < time)
+	{
+		usleep(500);
+		gettimeofday(&time_struct, NULL);
+		time_after = (time_struct.tv_sec * 1000) + (time_struct.tv_usec / 1000);
+	}
+}
 static void	sleep_and_think(t_philo *p)
 {
 	printf_action(p, "is sleeping");
-	usleep(p->args->time_to_sleep * 1000);
+	smart_sleep(p->args->time_to_sleep * 1000);
 	printf_action(p, "is thinking");
+	if (p->args->nb_philos % 2 == 1)
+	{	
+		if ((2 * p->args->time_to_eat) > p->args->time_to_sleep)
+			smart_sleep(1000 * ((2 * p->args->time_to_eat) - p->args->time_to_sleep));
+	}
+	else
+	{
+		if (p->args->time_to_eat > p->args->time_to_sleep)
+				smart_sleep(1000 * (p->args->time_to_eat - p->args->time_to_sleep));
+	}
 }
 
 static void	handle_single_fork(t_philo *p)
@@ -89,7 +116,6 @@ static void	handle_single_fork(t_philo *p)
 		pthread_mutex_unlock(&p->args->mutex_dead);
 		usleep(100);
 	}
-	pthread_mutex_unlock(p->left_fork);
 }
 
 static void	routine_pair(t_philo *p)
@@ -108,10 +134,8 @@ static void	routine_pair(t_philo *p)
 	p->nb_meal++;
 	pthread_mutex_unlock(&p->mutex_nb_meal);
 	printf_action(p, "is eating");
-	usleep(p->args->time_to_eat * 1000);
+	smart_sleep(p->args->time_to_eat * 1000);
 	pthread_mutex_unlock(p->right_fork);
 	pthread_mutex_unlock(p->left_fork);
-	printf_action(p, "is sleeping");
-	usleep(p->args->time_to_sleep * 1000);
-	printf_action(p, "is thinking");
+	sleep_and_think(p);
 }

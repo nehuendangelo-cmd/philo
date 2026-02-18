@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:14:56 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/17 23:04:44 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/18 19:12:52 by nehuen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-static void	fill_args_struct(char **argv, t_args *args, int *error);
+static void	fill_args_struct(char **argv, t_args *args, int *error, int argc);
 
 int	check_arg(int argc, char **argv, t_args *args)
 {
@@ -31,26 +31,22 @@ int	make_tab_args(int argc, char **argv, t_args *args)
 	int		error;
 
 	error = 0;
-	fill_args_struct(argv, args, &error);
-	if (args->nb_philos == 0 || args->time_to_die == 0 || args->time_to_eat == 0
-		|| args->time_to_sleep == 0)
-	{
-		printf("value can't be 0.");
-		return (0);
-	}
-	if (argc == 6)
-		args->nb_meals = char_to_int(argv[5], &error);
-	else
-		args->nb_meals = -1;
+	fill_args_struct(argv, args, &error, argc);
 	if (error == 1)
 	{
 		printf("arguments must be unsigned int");
 		return (0);
 	}
+	if (args->nb_philos == 0 || args->time_to_die == 0 || args->time_to_eat == 0
+		|| args->time_to_sleep == 0)
+	{
+		printf("value can't be 0 or negative");
+		return (0);
+	}
 	return (1);
 }
 
-static void	fill_args_struct(char **argv, t_args *args, int *error)
+static void	fill_args_struct(char **argv, t_args *args, int *error, int argc)
 {
 	pthread_mutex_init(&args->mutex_printf, NULL);
 	pthread_mutex_init(&args->mutex_dead, NULL);
@@ -61,6 +57,10 @@ static void	fill_args_struct(char **argv, t_args *args, int *error)
 	args->time_to_die = char_to_int(argv[2], error);
 	args->time_to_eat = char_to_int(argv[3], error);
 	args->time_to_sleep = char_to_int(argv[4], error);
+	if (argc == 6)
+		args->nb_meals = char_to_int(argv[5], error);
+	else
+		args->nb_meals = -1;
 }
 
 unsigned int	char_to_int(char *argv, int *error)

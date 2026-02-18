@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 15:21:10 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/17 19:18:12 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/18 17:07:39 by nehuen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct philo
 int						check_arg(int argc, char **argv, t_args *args);
 int						make_tab_args(int argc, char **argv, t_args *args);
 unsigned int			char_to_int(char *argv, int *error);
-void					init_struct(t_args *args, t_philo **philo, long long last_meal);
+void					init_struct(t_args *args, t_philo **philo);
 void					*routine(void *philo);
 void					make_tab_threads(pthread_t **thread, pthread_t **monitor,
 					t_args *args);
