@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 14:29:00 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/18 18:44:11 by nehuen           ###   ########.fr       */
+/*   Updated: 2026/02/19 02:44:46 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@ int	main(int argc, char **argv)
 	i = 0;
 	if (!check_arg(argc, argv, &args))
 		return (1);
-	init_struct(&args, &philo);
-	make_tab_threads(&thread, &monitor, &args);
+	if (!init_struct(&args, &philo))
+		return (1);
+	if (!make_tab_threads(&thread, &monitor, &args, philo))
+		return (1);
 	while (philo && i < args.nb_philos)
 	{
 		if (pthread_create(&thread[i], NULL, routine, (&philo[i])) != 0)
@@ -40,6 +42,7 @@ int	main(int argc, char **argv)
 	finish_pthread_and_destroy_mutex(philo, thread, monitor);
 	free_all(philo, thread, monitor);
 	mutex_destroy_args(&args);
+	return (0);
 }
 
 static void	free_all(t_philo *philo, pthread_t *thread, pthread_t *monitor)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 18:44:37 by nehuen            #+#    #+#             */
-/*   Updated: 2026/02/18 19:20:31 by nehuen           ###   ########.fr       */
+/*   Updated: 2026/02/19 02:48:27 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int limit_dish_not_reach(t_philo *p)
 	
 	gettimeofday(&time, NULL);
 	time_now =((time.tv_sec * 1000) + (time.tv_usec / 1000));
-	pthread_mutex_lock(&p[i].mutex_last_meal);
+	pthread_mutex_lock(&p->mutex_last_meal);
 	if ((p->args->time_to_die - (time_now - p->last_meal)) <= 0)
 	{
 		pthread_mutex_unlock(&p->mutex_last_meal);
@@ -64,12 +64,13 @@ static void *check_all_philos(t_philo *p)
 		if ((p[i].args->nb_meals == -1
 				|| p[i].nb_meal < p[0].args->nb_meals))
 		{
-			pthread_mutex_unlock(&p->mutex_nb_meal);
+			pthread_mutex_unlock(&p[i]->mutex_nb_meal);
 			if (limit_dish_not_reach(&p[i]) == 0)
 				return (NULL);
 		}
 		else
 		{
+			pthread_mutex_unlock(&p[i]->mutex_nb_meal);
 			if (limit_dish_reached_for_all(&p[i], &count_eat_enough) == 1)	
 				return (NULL);
 		}
