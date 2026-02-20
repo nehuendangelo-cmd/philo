@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:14:56 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/18 19:12:52 by nehuen           ###   ########.fr       */
+/*   Updated: 2026/02/20 03:56:53 by nd-angel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	check_arg(int argc, char **argv, t_args *args)
 {
 	if (argc != 6 && argc != 5)
 	{
-		printf("invalide number of arguments. must be 5 or 6.");
+		printf("invalide number of arguments. must be 5 or 6.\n");
 		return (0);
 	}
 	if (!make_tab_args(argc, argv, args))
@@ -34,15 +34,17 @@ int	make_tab_args(int argc, char **argv, t_args *args)
 	fill_args_struct(argv, args, &error, argc);
 	if (error == 1)
 	{
-		printf("arguments must be unsigned int");
+		printf("arguments must be unsigned int\n");
 		return (0);
 	}
 	if (args->nb_philos == 0 || args->time_to_die == 0 || args->time_to_eat == 0
 		|| args->time_to_sleep == 0)
 	{
-		printf("value can't be 0 or negative");
+		printf("value can't be 0 or negative\n");
 		return (0);
 	}
+	if (args->nb_meals == 0)
+		return (0);
 	return (1);
 }
 

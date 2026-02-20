@@ -18,7 +18,7 @@ CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
 
 # -fsanitize=thread
 
-SRCS = main.c  parsing.c  routine.c  utils.c  monitor.c
+SRCS = main.c  parsing.c  routine.c  routine_utils.c  utils.c  monitor.c
 
 OBJS = $(SRCS:.c=.o)
 
