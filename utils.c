@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:15:10 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/20 03:43:45 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/22 15:58:51 by nehuen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-static void	init_philo_loop(t_philo *philo, t_args *args,
+static int	init_philo_loop(t_philo *philo, t_args *args,
 	pthread_mutex_t *forks, long long last_meal)
 {
 	int	i;
@@ -25,13 +25,15 @@ static void	init_philo_loop(t_philo *philo, t_args *args,
 		philo[i].nb_meal = 0;
 		philo[i].args = args;
 		philo[i].args->time = last_meal;
-		pthread_mutex_init(&forks[i], NULL);
 		philo[i].left_fork = &forks[(i + 1) % args->nb_philos];
 		philo[i].right_fork = &forks[i];
-		pthread_mutex_init(&philo[i].mutex_last_meal, NULL);
-		pthread_mutex_init(&philo[i].mutex_nb_meal, NULL);
+		if (pthread_mutex_init(&forks[i], NULL)
+			|| pthread_mutex_init(&philo[i].mutex_last_meal, NULL)
+			|| pthread_mutex_init(&philo[i].mutex_nb_meal, NULL))
+			return (print_msg(STR_ERR_INIT, 0));
 		i++;
 	}
+	return (1);
 }
 
 int	init_struct(t_args *args, t_philo **philo)
@@ -53,7 +55,12 @@ int	init_struct(t_args *args, t_philo **philo)
 	}
 	(*philo)->args = args;
 	(*philo)->args->time = last_meal;
-	init_philo_loop(*philo, args, forks, last_meal);
+	if (!init_philo_loop(*philo, args, forks, last_meal))
+	{
+		free(forks);
+		free(*philo);
+		return (0);
+	}
 	return (1);
 }
 

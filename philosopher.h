@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 15:21:10 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/20 03:21:06 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/22 15:43:16 by nehuen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <unistd.h>
+
+# define STR_ERR_INIT "error while initializing mutex"
 
 typedef struct args
 {
@@ -61,6 +63,7 @@ void					mutex_destroy_args(t_args *args);
 void					finish_pthread_and_destroy_mutex(
 							t_philo *philo, pthread_t *thread,
 							pthread_t *monitor);
+int						print_msg(char *str, int exit_nbr);
 void					printf_action(t_philo *philo, char *action);
 void					smart_sleep(long long time);
 void					sleep_and_think(t_philo *p);

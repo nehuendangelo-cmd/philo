@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nd-angel <nd-angel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:14:56 by nd-angel          #+#    #+#             */
-/*   Updated: 2026/02/20 03:56:53 by nd-angel         ###   ########.fr       */
+/*   Updated: 2026/02/22 15:58:03 by nehuen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-static void	fill_args_struct(char **argv, t_args *args, int *error, int argc);
+static int	fill_args_struct(char **argv, t_args *args, int *error, int argc);
 
 int	check_arg(int argc, char **argv, t_args *args)
 {
@@ -31,7 +31,8 @@ int	make_tab_args(int argc, char **argv, t_args *args)
 	int		error;
 
 	error = 0;
-	fill_args_struct(argv, args, &error, argc);
+	if (!fill_args_struct(argv, args, &error, argc))
+		return (0);
 	if (error == 1)
 	{
 		printf("arguments must be unsigned int\n");
@@ -48,10 +49,11 @@ int	make_tab_args(int argc, char **argv, t_args *args)
 	return (1);
 }
 
-static void	fill_args_struct(char **argv, t_args *args, int *error, int argc)
+static int	fill_args_struct(char **argv, t_args *args, int *error, int argc)
 {
-	pthread_mutex_init(&args->mutex_printf, NULL);
-	pthread_mutex_init(&args->mutex_dead, NULL);
+	if (pthread_mutex_init(&args->mutex_printf, NULL)
+		|| pthread_mutex_init(&args->mutex_dead, NULL))
+		return (print_msg("error init thread\n", 0));
 	pthread_mutex_lock(&args->mutex_dead);
 	args->dead = 0;
 	pthread_mutex_unlock(&args->mutex_dead);
@@ -63,6 +65,7 @@ static void	fill_args_struct(char **argv, t_args *args, int *error, int argc)
 		args->nb_meals = char_to_int(argv[5], error);
 	else
 		args->nb_meals = -1;
+	return (1);
 }
 
 unsigned int	char_to_int(char *argv, int *error)

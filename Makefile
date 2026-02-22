@@ -6,7 +6,7 @@
 #    By: nehuen <nehuen@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 14:25:37 by nd-angel          #+#    #+#              #
-#    Updated: 2026/02/18 18:45:19 by nehuen           ###   ########.fr        #
+#    Updated: 2026/02/22 15:41:13 by nehuen           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
 
 # -fsanitize=thread
 
-SRCS = main.c  parsing.c  routine.c  routine_utils.c  utils.c  monitor.c
+SRCS = main.c  parsing.c  routine.c  routine_utils.c  utils.c  monitor.c \
+				error_handling.c
 
 OBJS = $(SRCS:.c=.o)
 
